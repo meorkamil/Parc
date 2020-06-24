@@ -32,7 +32,7 @@ class _PayCarState extends State<PayCar> {
 
     if (response.success == true) {
       await DatabaseService().updateCarPayment(docID);
-      await DatabaseService().addTransaction(docID, uid, noplate);
+      await DatabaseService().addTransaction(docID, uid, noplate, response.id);
     }
   }
 
@@ -69,7 +69,7 @@ class _PayCarState extends State<PayCar> {
               .where('status', isEqualTo: 'Unpaid')
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.data.documents.isEmpty) {
+            if (!snapshot.hasData || snapshot.data.documents.isEmpty) {
               return NoUnpaid();
             } else {
               return ListView.builder(
@@ -103,7 +103,8 @@ class _PayCarState extends State<PayCar> {
   Widget buildTripCard(BuildContext context, DocumentSnapshot car) {
     ProgressDialog dialog = new ProgressDialog(context);
 
-    if (car == null) return Loading();
+    //if (car['noplate'] == "") return Loading();
+
     //dialog.style(message: 'Please wait...');
     return new Padding(
         padding: EdgeInsets.only(top: 8.0),
@@ -124,10 +125,10 @@ class _PayCarState extends State<PayCar> {
               ),
             ),
             subtitle: Text(
-              car['status'] + 'RM10',
+              car['status'] + ' RM10',
               style: TextStyle(
                 color: Colors.red,
-                fontFamily: 'Montserrat',
+                fontFamily: 'Montserrat-bold',
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:parc_app/screens/shared/empty_car.dart';
+import 'package:parc_app/screens/shared/loading.dart';
 import 'package:parc_app/services/database.dart';
 import 'package:parc_app/models/user.dart';
 import 'package:parc_app/screens/car/car_tile.dart';
@@ -29,6 +31,7 @@ class _CarListState extends State<CarList> {
     return StreamBuilder<List<Car>>(
         stream: DatabaseService(uid: user.uid).car,
         builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data.isEmpty) return EmptyCar();
           return ListView.builder(
             itemCount: cars.length,
             itemBuilder: (context, index) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parc_app/screens/authenticate/reset_password.dart';
 import 'package:parc_app/screens/shared/constants.dart';
 import 'package:parc_app/screens/shared/loading.dart';
 import 'package:parc_app/services/auth.dart';
@@ -24,6 +25,17 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    void _showSettingsPanel() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+              child: ResetPassword(),
+            );
+          });
+    }
+
     return loading
         ? Loading()
         : Scaffold(
@@ -189,7 +201,7 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
                       SizedBox(
-                        height: 20.0,
+                        height: 10.0,
                       ),
                       FadeAnimation(
                         1,
@@ -208,6 +220,21 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ),
+                      ),
+                      FadeAnimation(
+                        1,
+                        Center(
+                            child: FlatButton(
+                          onPressed: () {
+                            _showSettingsPanel();
+                          },
+                          child: Text(
+                            "Forgot Password ?",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )),
                       ),
                     ],
                   ),

@@ -63,4 +63,23 @@ class AuthService {
       return null;
     }
   }
+
+  Future<void> updatePassword(String password) async {
+    var firebaseUser = await _auth.currentUser();
+    firebaseUser.updatePassword(password);
+  }
+
+  // Future resetPassword(String email) async {
+  //   try {
+  //     AuthResult result = await _auth.sendPasswordResetEmail(email: email);
+  //     // FirebaseUser user = result.user;
+
+  //     // // Create a new document for user
+  //     // await DatabaseService(uid: user.uid).updateUserData('User', email);
+  //     // return _userFromFirebaseUser(user);
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
 }

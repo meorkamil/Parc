@@ -5,6 +5,7 @@ import 'package:parc_app/models/user.dart';
 import 'dart:convert';
 import 'package:parc_app/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class CarTile extends StatelessWidget {
   final Car car;
@@ -13,6 +14,7 @@ class CarTile extends StatelessWidget {
 
   String _currentName;
   String _currentNoplate;
+
   // Blob tBlob = "UGFpZA==";
   // String result = base64Decode(tBlob);
   Base64Codec base64 = const Base64Codec();
@@ -121,8 +123,16 @@ class CarTile extends StatelessWidget {
                   color: Colors.red,
                 ),
                 onPressed: () async {
-                  await DatabaseService(uid: user.uid)
-                      .deleteCarsData(car.docID);
+                  // await DatabaseService(uid: user.uid)
+                  //     .deleteCarsData(car.docID);
+
+                  if (car.status == "Unpaid")
+                    return Toast.show("Unpaid Car !", context,
+                        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                  else {
+                    await DatabaseService(uid: user.uid)
+                        .deleteCarsData(car.docID);
+                  }
                 },
               ),
             ],

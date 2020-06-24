@@ -1,56 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:parc_app/models/user.dart';
 import 'package:parc_app/screens/shared/constants.dart';
+import 'package:parc_app/services/auth.dart';
 import 'package:parc_app/services/database.dart';
 import 'package:provider/provider.dart';
 
-class SettingsForm extends StatefulWidget {
+class ChangeContact extends StatefulWidget {
   @override
-  _SettingsFormState createState() => _SettingsFormState();
+  _ChangeContactState createState() => _ChangeContactState();
 }
 
-class _SettingsFormState extends State<SettingsForm> {
+class _ChangeContactState extends State<ChangeContact> {
   final _formKey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
+  String contactNo;
+  String error = "";
 
-  String noPlate;
-  String _currentNoplate;
-
-  successCar() {
+  successChange() {
     Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Your car registered in Parc !'),
-    ));
-  }
-
-  errorCar() {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Car already exist !'),
+      content: Text('Your contact no has changed !'),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
     final user = Provider.of<User>(context);
     return Form(
       key: _formKey,
       child: Column(children: <Widget>[
+        SizedBox(height: 20.0),
+
         Text(
-          'Add Car',
+          'Change Contact No',
           style: TextStyle(
             fontSize: 18.0,
-            fontFamily: 'Montserrat-bold',
-            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(
           height: 20.0,
         ),
         TextFormField(
-          decoration: textInputDecoration.copyWith(hintText: 'No Plate'),
-          validator: (val) => val.isEmpty ? 'Please enter a No Plate' : null,
-          onChanged: (val) => setState(() => noPlate = val),
+          decoration: textInputDecoration.copyWith(hintText: 'Contact No'),
+          validator: (val) => val.isEmpty ? 'Contact No is required' : null,
+          onChanged: (val) => setState(() => contactNo = val),
         ),
         SizedBox(height: 20.0),
+        Text(
+          error,
+          style: TextStyle(
+            color: Colors.red[200],
+          ),
+        ),
         // TextFormField(
         //   decoration: textInputDecoration,
         //   validator: (val) =>
@@ -59,18 +59,17 @@ class _SettingsFormState extends State<SettingsForm> {
         // ),
         RaisedButton(
             color: Colors.pinkAccent,
-            child: Text('Add', style: TextStyle(color: Colors.white)),
+            child: Text('Submit', style: TextStyle(color: Colors.white)),
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                var trimNo = noPlate
-                    .replaceAll(new RegExp(r"\s+\b|\b\s"), "")
-                    .toUpperCase();
                 // print(trimNo);
-                dynamic result =
-                    await DatabaseService(uid: user.uid).updateCarsData(trimNo);
-                if (result == null) return errorCar();
+                await DatabaseService(uid: user.uid).updateContactNo(contactNo);
                 Navigator.pop(context);
-                successCar();
+                // await _auth.updatePassword(password);
+                // Navigator.pop(context);
+                // successChange();
+
+                // successCar();
               }
               //print(_currentName);
               //print(_currentNoplate);

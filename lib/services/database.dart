@@ -69,17 +69,49 @@ class DatabaseService {
     }
   }
 
+  // checkStatusCar(String noplate) async {
+  //   try {
+  //     final noplateCheck = await carsCollection
+  //         .where('noplate', isEqualTo: noplate)
+  //         .where('status', isEqualTo: 'Unpaid')
+  //         .getDocuments();
+
+  //     if (documents.) {
+  //       return true;
+  //     } else {
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
   Future updateCarsDataDoc(String noplate, String docID) async {
     return await carsCollection.document(docID).updateData({
       'noplate': noplate,
     });
   }
 
-  Future addTransaction(String docID, String userID, String noplate) async {
+  Future updateUserName(String name) async {
+    return await usersCollection.document(uid).updateData({
+      'name': name,
+    });
+  }
+
+  Future updateContactNo(String contactNo) async {
+    return await usersCollection.document(uid).updateData({
+      'contact': contactNo,
+    });
+  }
+
+  Future addTransaction(
+      String docID, String userID, String noplate, String stripe) async {
     return await transCollection.add({
       'carID': docID,
       'uid': userID,
+      'stripe': stripe,
       'noplate': noplate,
+      'amount': 'RM10',
       'time': FieldValue.serverTimestamp()
     });
   }
@@ -92,6 +124,13 @@ class DatabaseService {
 
   Future deleteCarsData(String docID) async {
     return await carsCollection.document(docID).delete();
+
+    // if (await checkCar(noplate) == true) {
+    //   return await carsCollection.document(docID).delete();
+    // } else {
+    //   //final String error = "Vehicle already exist!";
+    //   return null;
+    // }
   }
 
   // Future updateCarsDataDoc(String noplate, String docID) async {
@@ -116,6 +155,7 @@ class DatabaseService {
     return await usersCollection.document(uid).setData({
       'name': name,
       'email': email,
+      'contact': '-',
     });
   }
 

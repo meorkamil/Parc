@@ -4,53 +4,38 @@ import 'package:parc_app/screens/shared/constants.dart';
 import 'package:parc_app/services/database.dart';
 import 'package:provider/provider.dart';
 
-class SettingsForm extends StatefulWidget {
+class EditName extends StatefulWidget {
   @override
-  _SettingsFormState createState() => _SettingsFormState();
+  _EditNameState createState() => _EditNameState();
 }
 
-class _SettingsFormState extends State<SettingsForm> {
+class _EditNameState extends State<EditName> {
   final _formKey = GlobalKey<FormState>();
-
-  String noPlate;
-  String _currentNoplate;
-
-  successCar() {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Your car registered in Parc !'),
-    ));
-  }
-
-  errorCar() {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Car already exist !'),
-    ));
-  }
+  String name;
 
   @override
   Widget build(BuildContext context) {
-    final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
     final user = Provider.of<User>(context);
     return Form(
       key: _formKey,
       child: Column(children: <Widget>[
+        SizedBox(height: 20.0),
         Text(
-          'Add Car',
+          'Edit Name',
           style: TextStyle(
             fontSize: 18.0,
-            fontFamily: 'Montserrat-bold',
-            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(
           height: 20.0,
         ),
         TextFormField(
-          decoration: textInputDecoration.copyWith(hintText: 'No Plate'),
-          validator: (val) => val.isEmpty ? 'Please enter a No Plate' : null,
-          onChanged: (val) => setState(() => noPlate = val),
+          decoration: textInputDecoration.copyWith(hintText: 'Name'),
+          validator: (val) => val.isEmpty ? 'New Name' : null,
+          onChanged: (val) => setState(() => name = val),
         ),
         SizedBox(height: 20.0),
+
         // TextFormField(
         //   decoration: textInputDecoration,
         //   validator: (val) =>
@@ -59,18 +44,13 @@ class _SettingsFormState extends State<SettingsForm> {
         // ),
         RaisedButton(
             color: Colors.pinkAccent,
-            child: Text('Add', style: TextStyle(color: Colors.white)),
+            child: Text('Update', style: TextStyle(color: Colors.white)),
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                var trimNo = noPlate
-                    .replaceAll(new RegExp(r"\s+\b|\b\s"), "")
-                    .toUpperCase();
                 // print(trimNo);
-                dynamic result =
-                    await DatabaseService(uid: user.uid).updateCarsData(trimNo);
-                if (result == null) return errorCar();
+                await DatabaseService(uid: user.uid).updateUserName(name);
                 Navigator.pop(context);
-                successCar();
+                // successCar();
               }
               //print(_currentName);
               //print(_currentNoplate);

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parc_app/models/user.dart';
+import 'package:parc_app/screens/shared/empty_transaction.dart';
 import 'package:parc_app/screens/shared/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,8 @@ class _TransactionsListState extends State<TransactionsList> {
               .where('uid', isEqualTo: user.uid)
               .snapshots(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return Loading();
+            if (!snapshot.hasData || snapshot.data.documents.isEmpty)
+              return EmptyTransactions();
             return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (BuildContext context, int index) =>

@@ -8,7 +8,8 @@ import 'package:stripe_payment/stripe_payment.dart';
 class StripeTransactionResponse {
   String message;
   bool success;
-  StripeTransactionResponse({this.message, this.success});
+  String id;
+  StripeTransactionResponse({this.message, this.success, this.id});
 }
 
 class StripeService {
@@ -65,6 +66,7 @@ class StripeService {
         return new StripeTransactionResponse(
           message: 'Transaction successful',
           success: true,
+          id: paymentMethod.id,
         );
       } else {
         return new StripeTransactionResponse(
