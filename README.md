@@ -1,6 +1,12 @@
 # parc_app
 
-A new Flutter project.
+A new Final Year Project By Meor Muhammad Kamil.
+This is Mobile application for Parc (Contactless Parking System). 
+The recognition system will be uploaded soon.
+
+Demonstration : https://youtu.be/GM3oeu9OhL0
+
+
 
 ## Getting Started
 
